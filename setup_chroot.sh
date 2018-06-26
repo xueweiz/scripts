@@ -26,7 +26,7 @@ echo "path = /home/4T" >> /etc/samba/smb.conf
 echo "valid users = xuewei"  >> /etc/samba/smb.conf
 echo "read only = no" >> /etc/samba/smb.conf
 echo "" >> /etc/samba/smb.conf
-echo "[2T]" > /etc/samba/smb.conf
+echo "[2T]" >> /etc/samba/smb.conf
 echo "path = /home/2T" >> /etc/samba/smb.conf
 echo "valid users = xuewei"  >> /etc/samba/smb.conf
 echo "read only = no" >> /etc/samba/smb.conf
