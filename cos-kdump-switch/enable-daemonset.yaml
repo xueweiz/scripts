@@ -1,0 +1,54 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+    name: kdump-switch
+spec:
+  template:
+    metadata:
+      labels:
+        name: kdump-switch
+    spec:
+      hostNetwork: true
+      hostPID: true
+      volumes:
+      - name: kdump-helper
+        hostPath:
+          path: /usr/sbin/kdump_helper
+      - name: dev
+        hostPath:
+          path: /dev
+      - name: os-release
+        hostPath:
+          path: /etc/os-release
+      - name: kexec-crash-size
+        hostPath:
+          path: /sys/kernel/kexec_crash_size
+      - name: kexec-crash-loaded
+        hostPath:
+          path: /sys/kernel/kexec_crash_loaded
+      - name: sysrq
+        hostPath:
+          path: /proc/sysrq-trigger
+      containers:
+      - image: gcr.io/xueweiz-experimental/cos-kdump:latest
+        command: ["/bin/sh", "-c"]
+        args: ["usr/bin/kdump.sh enable && sleep infinity"]
+        name: kdump-switch
+        resources:
+          requests:
+            cpu: 0.15
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: kdump-helper
+          mountPath: /usr/sbin/kdump_helper
+        - name: dev
+          mountPath: /dev
+        - name: kexec-crash-size
+          mountPath: /sys/kernel/kexec_crash_size
+        - name: kexec-crash-loaded
+          mountPath: /sys/kernel/kexec_crash_loaded
+        - name: os-release
+          mountPath: /rootfs/etc/os-release
+        - name: sysrq
+          mountPath: /sysrq
