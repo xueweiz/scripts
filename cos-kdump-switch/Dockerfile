@@ -14,9 +14,6 @@
 
 FROM ubuntu:16.04
 
-# Disable prompts from apt
-ENV DEBIAN_FRONTEND noninteractive
-
 ADD kdump.sh /usr/bin/kdump.sh
 RUN chmod a+x /usr/bin/kdump.sh
 CMD ["/usr/bin/kdump.sh"]

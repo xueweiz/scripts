@@ -30,7 +30,7 @@ spec:
         hostPath:
           path: /proc/sysrq-trigger
       containers:
-      - image: gcr.io/xueweiz-experimental/cos-kdump:latest
+      - image: gcr.io/xueweiz-experimental/cos-kdump:20190710
         command: ["/bin/sh", "-c"]
         args: ["usr/bin/kdump.sh enable && sleep infinity"]
         name: kdump-switch

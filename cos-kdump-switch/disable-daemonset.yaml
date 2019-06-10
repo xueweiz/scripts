@@ -1,3 +1,31 @@
+# Copyright 2019 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+# Deploy this DaemonSet to disable hyper-threading on the nodes with the
+# "cloud.google.com/gke-smt-disabled=true" label.
+#
+# WARNING: Disabling hyper-threading might have severe performance impact on
+# your clusters and application. Please ensure that this is acceptable before
+# deploying this to your production clusters.
+#
+# WARNING: Disabling hyper-threading requires node reboot. Therefore, in order
+# to avoid disrupting your workloads, it is recommended to create a new node
+# pool with the "cloud.google.com/gke-smt-disabled=true" label in your cluster,
+# deploy the DaemonSet to disable hyper-threading in that node pool, and then
+# migrate your workloads to the new node pool.
+
 apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
@@ -30,7 +58,7 @@ spec:
         hostPath:
           path: /proc/sysrq-trigger
       containers:
-      - image: gcr.io/xueweiz-experimental/cos-kdump:latest
+      - image: gcr.io/xueweiz-experimental/cos-kdump:20190710
         command: ["/bin/sh", "-c"]
         args: ["usr/bin/kdump.sh disable && sleep infinity"]
         name: kdump-switch
