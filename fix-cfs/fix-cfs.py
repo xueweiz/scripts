@@ -104,7 +104,7 @@ def FixPodIfAffected(pod_dir, dry_run):
           (pod_dir, new_quota, new_period))
   except IOError:
     print('Warning: failed to fix cfs at pod_dir %s, ',
-          'the directory may have disappeared.')
+          'the directory may have disappeared.' % (pod_dir))
     return
 
 
@@ -139,7 +139,7 @@ def FixContainerIfAffected(container_dir, dry_run):
           (container_dir, new_quota, new_period))
   except IOError:
     print('Warning: failed to fix cfs at container_dir %s, ',
-          'the directory may have disappeared.')
+          'the directory may have disappeared.' % (container_dir))
     return
 
 
