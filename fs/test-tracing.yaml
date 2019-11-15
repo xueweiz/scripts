@@ -1,0 +1,42 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: test-143154526-tracing
+  namespace: default
+spec:
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      k8s-app: test-143154526-tracing
+  template:
+    metadata:
+      labels:
+        k8s-app: test-143154526-tracing
+    spec:
+      hostPID: true
+      volumes:
+        - hostPath:
+            path: /sys
+            type: ""
+          name: mount-sys
+      containers:
+      - command: ["/bin/bash"]
+        args:
+        - "-c"
+        - "HOST_SYS=/host-sys; TRACE_DIR=$HOST_SYS/kernel/debug/tracing/instances/looking_for_writes; mkdir -p $TRACE_DIR; echo userstacktrace > $TRACE_DIR/trace_options; echo stacktrace > $TRACE_DIR/trace_options; SDA_ID=$(((8<<20)+0)); echo \"rwbs ~ '*W*' && dev == $SDA_ID\" > $TRACE_DIR/events/block/block_rq_insert/filter; echo 1 > $TRACE_DIR/events/block/block_rq_insert/enable; echo \"dev == $SDA_ID\" > $TRACE_DIR/events/block/block_dirty_buffer/filter; echo 1 > $TRACE_DIR/events/block/block_dirty_buffer/enable; cat $TRACE_DIR/trace_pipe"
+        image: gcr.io/google-containers/toolbox:latest
+        imagePullPolicy: IfNotPresent
+        name: test-143154526-tracing
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: mount-sys
+          mountPath: /host-sys
+        resources:
+          limits:
+            cpu: 100m
+            memory: 400Mi
+          requests:
+            cpu: 30m
+            memory: 400Mi
