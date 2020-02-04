@@ -1,0 +1,14 @@
+steps:
+- name: gcr.io/cloud-builders/docker
+  args: [ build, -t, gcr.io/$PROJECT_ID/service-account-issue:latest, . ]
+
+- name: 'gcr.io/cloud-builders/docker'
+  id: Push
+  args:
+  - 'push'
+  - 'gcr.io/$PROJECT_ID/service-account-issue:latest'
+
+- name: gcr.io/cloud-builders/gcloud
+  args: [ beta, compute, instance-groups, managed, rolling-action, replace, service-account-issue, --zone=us-central1-a, --max-unavailable=0, --max-surge=1, --min-ready=90s]
+
+images: ['gcr.io/$PROJECT_ID/service-account-issue:latest']
