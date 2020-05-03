@@ -5,7 +5,12 @@ sudo grep "ALL   ALL = (ALL) NOPASSWD: ALL" /etc/sudoers || echo "ALL   ALL = (A
 
 # browser
 sudo apt update
-sudo apt install -y chromium-browser
+# Do NOT install chromium-browser. It is based on snap, and has a
+# problem accessing /tmp:
+# https://bugs.launchpad.net/ubuntu/+source/chromium-browser/+bug/1851250
+# sudo apt install -y chromium-browser
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+sudo dpkg -i google-chrome-stable_current_amd64.deb
 sudo dpkg -l | grep firefox | awk '{print $2}' | xargs sudo dpkg --remove --force-remove-reinstreq
 
 # commandline utils
