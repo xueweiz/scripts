@@ -23,7 +23,7 @@ wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add
 sudo apt install -y apt-transport-https
 echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
 sudo apt update
-sudo apt install -y sublime-text
+sudo apt install -y sublime-text sublime-merge
 
 # go
 sudo apt install -y curl binutils bison gcc make
@@ -53,6 +53,13 @@ bash /tmp/install.sh --disable-prompts
 echo "export PATH=~/google-cloud-sdk/bin:\$PATH" >> ~/.bashrc
 source ~/.bashrc
 
+# docker
+sudo apt install -y docker.io
+sudo systemctl enable --now docker
+sudo usermod -aG docker xuewei
+sudo usermod -aG docker root
+newgrp docker
+
 ## interactive
 
 # github auth
@@ -71,9 +78,9 @@ cd $GOPATH/src/k8s.io/node-problem-detector
 git remote add xueweiz git@github.com:xueweiz/node-problem-detector.git
 git pull xueweiz
 
-# linux
-cd ~/zxw/
-git clone https://github.com/gregkh/linux.git
-cd linux
-git remote add linus https://github.com/torvalds/linux.git
-git pull linus
+# debug
+sudo apt install -y linux-tools-common
+sudo apt install -y linux-tools-5.4.0-28-generic
+
+# bpf
+sudo apt install -y build-essential make libelf-dev clang strace tar bpfcc-tools linux-headers-$(uname -r) gcc-multilib
