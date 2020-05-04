@@ -76,6 +76,14 @@ function setup-repo() {
 	git remote add xueweiz git@github.com:xueweiz/node-problem-detector.git || true
 	git fetch xueweiz
 	popd
+	# linux
+	pushd ~/zxw/
+	git clone git@github.com:xueweiz/linux.git --depth 1
+	pushd linux
+	git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+	git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/
+	popd
+	popd
 }
 
 function setup-gcloud() {
