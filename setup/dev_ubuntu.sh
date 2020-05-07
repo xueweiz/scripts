@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# echo "HandleLidSwitch=ignore" | sudo tee /etc/systemd/logind.conf
+
 set -euxo pipefail
 
 function basic-upgrade() {
@@ -17,10 +19,12 @@ function setup-linux() {
 }
 
 function setup-sudo() {
+	set +e
 	sudo grep -q "ALL   ALL = (ALL) NOPASSWD: ALL" /etc/sudoers
 	if [ $? -ne 0 ]; then
 		echo "ALL   ALL = (ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers
 	fi
+	set -e
 }
 
 function setup-browser() {
