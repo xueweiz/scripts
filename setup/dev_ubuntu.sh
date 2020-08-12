@@ -146,6 +146,7 @@ function main() {
 
 	setup-go
 	setup-gcloud
+	setup-docker
 
 	setup-ubuntu-desktop
 
