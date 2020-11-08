@@ -4,6 +4,29 @@
 
 set -euxo pipefail
 
+function repair-chrome-after-suspend() {
+	# https://askubuntu.com/questions/1273399/problems-with-chrome-browser-after-suspending-the-computer-on-ubuntu-20-04/1289285#1289285
+	sudo tee /lib/systemd/system-sleep/revive-chrome-gpu << EOF
+#!/bin/sh
+
+set -e
+
+if [ "$2" = "suspend" ] || [ "$2" = "hybrid-sleep" ]
+then
+    case "$1" in
+        pre)
+            true 
+            ;;
+        post) 
+            sleep 1
+            pkill -f 'chrome \-\-type=gpu-process'
+            ;;
+    esac
+fi
+EOF
+	sudo chmod +x /lib/systemd/system-sleep/revive-chrome-gpu
+}
+
 function basic-upgrade() {
 	sudo apt update
 	sudo apt upgrade -y
